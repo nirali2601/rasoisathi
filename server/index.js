@@ -13,9 +13,10 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const JWT_SECRET = process.env.JWT_SECRET || 'rasoisathi-dev-secret';
 const MEALDB = process.env.MEALDB_BASE || 'https://www.themealdb.com/api/json/v1/1';
+const { buildCorsOptions } = require('./cors-config');
 
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:4200' }));
+app.use(cors(buildCorsOptions(process.env)));
 app.use(express.json({ limit: '1mb' }));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, limit: 200 }));
 
