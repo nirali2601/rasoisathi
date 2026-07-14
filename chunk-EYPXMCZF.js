@@ -1,0 +1,1 @@
+function r(t){let e=0;for(let i=0;i<t.length;i++)e=(e<<5)-e+t.charCodeAt(i);return Math.abs(e)}function n(t){let e=r(t),i=["Easy","Medium","Hard"];return{cookingTime:15+e%76,difficulty:i[e%3],calories:180+e%620,rating:Math.round((35+e%16)/10*10)/10}}export{n as a};
