@@ -28,11 +28,10 @@ interface Testimonial { name: string; role: string; quote: string; avatar: strin
         <p class="hero-text">RasoiSathi AI transforms your pantry into personalized recipes — search by ingredients, chat with our AI chef, and save favorites for your next meal.</p>
 
         <form class="hero-search glass-panel" [formGroup]="form" (ngSubmit)="goSearch()">
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>What's in your kitchen?</mat-label>
-            <input matInput formControlName="query" placeholder="tomato, onion, paneer..." />
-            <mat-icon matPrefix>search</mat-icon>
-          </mat-form-field>
+          <div class="search-input-wrapper">
+            <mat-icon class="search-icon">search</mat-icon>
+            <input type="text" formControlName="query" placeholder="tomato, onion, paneer..." aria-label="What's in your kitchen?" />
+          </div>
           <button mat-flat-button color="primary" type="submit">
             <mat-icon>restaurant</mat-icon> Explore Recipes
           </button>
@@ -212,7 +211,7 @@ interface Testimonial { name: string; role: string; quote: string; avatar: strin
       border-radius: var(--radius-lg);
     }
     .hero-search {
-      align-items: start;
+      align-items: center;
       display: grid;
       gap: 12px;
       grid-template-columns: 1fr auto;
@@ -220,7 +219,6 @@ interface Testimonial { name: string; role: string; quote: string; avatar: strin
       max-width: 600px;
       padding: 16px;
     }
-    .hero-search mat-form-field { background: rgba(255,255,255,0.95); border-radius: var(--radius); }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
     .cta-generate {
       background: linear-gradient(135deg, #fff, #ffe0cc) !important;
@@ -359,7 +357,7 @@ export class Home implements OnInit, AfterViewInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private recipes = inject(RecipeSignalStore);
-  form = this.fb.group({ query: ['tomato,onion'] });
+  form = this.fb.group({ query: [''] });
 
   @ViewChild('statsSection') private statsSection?: ElementRef<HTMLElement>;
 

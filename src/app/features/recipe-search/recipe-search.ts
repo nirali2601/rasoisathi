@@ -29,11 +29,10 @@ import { Recipe } from '../../models/recipe.model';
       </div>
 
       <form class="panel search-panel" [formGroup]="form" (ngSubmit)="search()">
-        <mat-form-field appearance="outline">
-          <mat-label>Search text</mat-label>
-          <mat-icon matPrefix>search</mat-icon>
-          <input matInput formControlName="query" placeholder="tomato, onion, paneer" />
-        </mat-form-field>
+        <div class="search-input-wrapper">
+          <mat-icon class="search-icon">search</mat-icon>
+          <input type="text" formControlName="query" placeholder="tomato, onion, paneer..." aria-label="Search ingredients or recipe name" />
+        </div>
         <mat-form-field appearance="outline">
           <mat-label>Mode</mat-label>
           <mat-select formControlName="mode">
@@ -89,7 +88,7 @@ import { Recipe } from '../../models/recipe.model';
   styles: [`
     .page-header { margin-bottom: 8px; }
     .search-panel {
-      align-items: start;
+      align-items: center;
       display: grid;
       gap: 14px;
       grid-template-columns: 2fr 1fr 1fr 1fr auto;
@@ -112,7 +111,7 @@ export class RecipeSearch implements OnInit {
   auth = inject(AuthSignalStore);
   private snack = inject(SnackService);
   private lastSavedHistoryKey = '';
-  form = this.fb.nonNullable.group({ query: ['tomato,onion'], mode: ['ingredients' as 'ingredients' | 'name'], cuisine: [''], category: [''] });
+  form = this.fb.nonNullable.group({ query: [''], mode: ['ingredients' as 'ingredients' | 'name'], cuisine: [''], category: [''] });
   skeletonRows = Array.from({ length: 6 }, (_, i) => i);
 
   ngOnInit(): void {
