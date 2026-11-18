@@ -12,7 +12,7 @@ export class AuthSignalStore {
   private tokenKey = 'rasoisathi_token';
   private userKey = 'rasoisathi_user';
 
-  token = signal<string | null>(sessionStorage.getItem(this.tokenKey));
+  token = signal<string | null>(localStorage.getItem(this.tokenKey));
   user = signal<User | null>(this.readUser());
   isLoggedIn = computed(() => !!this.token());
 
@@ -37,22 +37,22 @@ export class AuthSignalStore {
   }
 
   logout(): void {
-    sessionStorage.removeItem(this.tokenKey);
-    sessionStorage.removeItem(this.userKey);
+    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.userKey);
     this.token.set(null);
     this.user.set(null);
     this.chatStore.clearSession();
   }
 
   private setSession(res: AuthResponse): void {
-    sessionStorage.setItem(this.tokenKey, res.token);
-    sessionStorage.setItem(this.userKey, JSON.stringify(res.user));
+    localStorage.setItem(this.tokenKey, res.token);
+    localStorage.setItem(this.userKey, JSON.stringify(res.user));
     this.token.set(res.token);
     this.user.set(res.user);
   }
 
   private readUser(): User | null {
-    const raw = sessionStorage.getItem(this.userKey);
+    const raw = localStorage.getItem(this.userKey);
     return raw ? JSON.parse(raw) as User : null;
   }
 }

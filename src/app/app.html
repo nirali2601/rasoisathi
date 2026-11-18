@@ -1,7 +1,7 @@
 <header class="shell-header">
   <a routerLink="/" class="brand" (click)="closeMenu()">
     <span class="brand-icon">R</span>
-    <span class="brand-text">RasoiSathi <em>AI</em></span>
+    <span class="brand-text">RasoiSathi</span>
   </a>
 
   <button class="menu-toggle" type="button" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()" aria-label="Toggle navigation">
@@ -11,12 +11,12 @@
   <nav [class.open]="menuOpen()">
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Home</a>
     <a routerLink="/search" routerLinkActive="active" (click)="closeMenu()">Search</a>
-    <a routerLink="/chat" routerLinkActive="active" (click)="closeMenu()">AI Chat</a>
+    <a routerLink="/chat" routerLinkActive="active" (click)="closeMenu()">Chatbot</a>
     @if (auth.isLoggedIn()) {
       <a routerLink="/favorites" routerLinkActive="active" (click)="closeMenu()">Favorites</a>
       <a routerLink="/profile" routerLinkActive="active" (click)="closeMenu()">Profile</a>
       <button mat-stroked-button type="button" class="nav-btn" (click)="auth.logout(); closeMenu()">
-        <mat-icon>logout</mat-icon> Logout
+        <mat-icon>logout</mat-icon> <span>Logout</span>
       </button>
     } @else {
       <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()">Login</a>
@@ -32,18 +32,18 @@
 <footer class="shell-footer">
   <div class="footer-grid">
     <div class="footer-brand">
-      <div class="brand"><span class="brand-icon">R</span> RasoiSathi <em>AI</em></div>
-      <p>AI-powered recipe discovery for everyday cooking. Turn your pantry into delicious meals.</p>
+      <div class="brand"><span class="brand-icon">R</span> RasoiSathi</div>
+      <p>Smart recipe discovery for everyday cooking. Turn your pantry into delicious meals.</p>
       <div class="social-links">
         <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub"><mat-icon>code</mat-icon></a>
         <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><mat-icon>work</mat-icon></a>
-        <a href="mailto:hello@rasoisathi.ai" aria-label="Email"><mat-icon>mail</mat-icon></a>
+        <a href="mailto:hello@rasoisathi.com" aria-label="Email"><mat-icon>mail</mat-icon></a>
       </div>
     </div>
     <div class="footer-col">
       <h4>Explore</h4>
       <a routerLink="/search">Search Recipes</a>
-      <a routerLink="/chat">AI Assistant</a>
+      <a routerLink="/chat">Chatbot</a>
       <a routerLink="/favorites">Favorites</a>
     </div>
     <div class="footer-col">
@@ -54,10 +54,10 @@
     </div>
     <div class="footer-col">
       <h4>Contact</h4>
-      <p class="footer-text">hello@rasoisathi.ai</p>
+      <p class="footer-text">hello@rasoisathi.com</p>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>RasoiSathi AI &copy; {{ year }} — Smart Recipe Recommendation System</p>
+    <p>RasoiSathi &copy; {{ year }} — Smart Recipe Recommendation System</p>
   </div>
 </footer>

@@ -26,6 +26,10 @@ export class RecipeSignalStore {
     return this.http.get<Recipe>(`${environment.apiUrl}/recipes/${id}`);
   }
 
+  getRandomRecipe() {
+    return this.http.get<Recipe>(`${environment.apiUrl}/recipes/random`);
+  }
+
   loadFilters(): void {
     this.http.get<string[]>(`${environment.apiUrl}/recipes/categories`).subscribe((items) => this.categories.set(items));
     this.http.get<string[]>(`${environment.apiUrl}/recipes/cuisines`).subscribe((items) => this.cuisines.set(items));

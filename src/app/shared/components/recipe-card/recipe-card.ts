@@ -20,7 +20,6 @@ import { getRecipeMeta } from '../../utils/recipe-meta.util';
         <div class="img-overlay">
           <button mat-icon-button type="button" class="overlay-btn" [class.is-favorite]="isFavorite()"
                   (click)="favoriteClick.emit(recipe()); $event.stopPropagation()"
-                  [disabled]="!canFavorite()"
                   [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'">
             <mat-icon>{{ isFavorite() ? 'favorite' : 'favorite_border' }}</mat-icon>
           </button>

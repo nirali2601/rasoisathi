@@ -1,4 +1,4 @@
-# Deploying RasoiSathi AI
+# Deploying RasoiSathi
 
 This project consists of an Angular frontend and an Express backend API with a SQLite database. 
 Since the backend uses a local SQLite database, deploying the entire app as a single service on Vercel is not supported (due to its serverless nature and read-only ephemeral file system).
@@ -50,12 +50,12 @@ GitHub Pages doesn't automatically route requests for single-page applications. 
 
 3. Duplicate the main `index.html` to `404.html` so that direct navigation and page reloads route correctly:
    ```bash
-   cp dist/rasoisathi-ai/browser/index.html dist/rasoisathi-ai/browser/404.html
+   cp dist/rasoisathi/browser/index.html dist/rasoisathi/browser/404.html
    ```
 
 4. Deploy the build outputs to the `gh-pages` branch of your repository:
    ```bash
-   npx angular-cli-ghpages --dir=dist/rasoisathi-ai/browser
+   npx angular-cli-ghpages --dir=dist/rasoisathi/browser
    ```
 
 5. Go to your GitHub Repository → **Settings** → **Pages**:
@@ -76,6 +76,6 @@ If you prefer to deploy the frontend to **Vercel** instead of GitHub Pages:
    - **Framework Preset:** `Other` (or Angular, but ensure output paths are configured correctly)
    - **Root Directory:** Leave blank (or root)
    - **Build Command:** `ng build` (will default base href to `/`)
-   - **Output Directory:** `dist/rasoisathi-ai/browser`
+   - **Output Directory:** `dist/rasoisathi/browser`
 3. Click **Deploy**.
 4. In your Render Web Service environment variables, update `CLIENT_URL` to match your Vercel URL.

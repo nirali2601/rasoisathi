@@ -14,8 +14,8 @@ import { ChatSignalStore } from '../../core/stores/chat-signal.store';
   template: `
     <section class="page page-narrow chat-page">
       <div class="page-header">
-        <h1 class="section-title"><mat-icon>auto_awesome</mat-icon> AI Recipe Assistant</h1>
-        <p class="section-subtitle">Describe what you want to cook — our AI will find matching recipes instantly.</p>
+        <h1 class="section-title"><mat-icon>auto_awesome</mat-icon> Recipe Assistant</h1>
+        <p class="section-subtitle">Describe what you want to cook — our assistant will find matching recipes instantly.</p>
       </div>
 
       <mat-card class="chat-window">
@@ -58,6 +58,30 @@ import { ChatSignalStore } from '../../core/stores/chat-signal.store';
                       <strong>{{ recipe.name }}</strong>
                       <span class="meta">{{ recipe.cuisine }} &bull; {{ recipe.category }}</span>
                       <span class="badge">{{ recipe.matchPercent }}% match</span>
+                    </div>
+                  </a>
+                }
+              </div>
+            }
+            @if (message.videos?.length) {
+              <div class="chat-videos-header">
+                <mat-icon>play_circle_filled</mat-icon>
+                <span>Recommended Video Guides</span>
+              </div>
+              <div class="chat-videos">
+                @for (video of message.videos; track video.id) {
+                  <a class="chat-video-card" [href]="video.url" target="_blank" rel="noopener noreferrer">
+                    <div class="video-thumbnail-wrapper">
+                      <img [src]="video.thumbnail" [alt]="video.title" loading="lazy" />
+                      <div class="play-overlay">
+                        <mat-icon>play_arrow</mat-icon>
+                      </div>
+                    </div>
+                    <div class="video-info">
+                      <span class="video-title" [title]="video.title">{{ video.title }}</span>
+                      <span class="video-channel">
+                        <mat-icon>videocam</mat-icon> {{ video.channel }}
+                      </span>
                     </div>
                   </a>
                 }
@@ -155,8 +179,151 @@ import { ChatSignalStore } from '../../core/stores/chat-signal.store';
     .chat-recipe img { border-radius: 8px; height: 52px; object-fit: cover; width: 52px; }
     .chat-recipe div { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
     .chat-recipe strong { color: var(--text); font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chat-videos-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 12px 0 6px 40px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .chat-videos-header mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      color: #ff0000;
+    }
+    .chat-videos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 0 0 16px 40px;
+    }
+    .chat-video-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      text-decoration: none;
+      width: 200px;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: var(--shadow-sm);
+    }
+    .chat-video-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      border-color: #ff0000;
+    }
+    .video-thumbnail-wrapper {
+      position: relative;
+      aspect-ratio: 16/9;
+      width: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+    .video-thumbnail-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .chat-video-card:hover .video-thumbnail-wrapper img {
+      transform: scale(1.05);
+    }
+    .play-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      display: grid;
+      place-items: center;
+      opacity: 0.8;
+      transition: all 0.3s ease;
+    }
+    .chat-video-card:hover .play-overlay {
+      background: rgba(0, 0, 0, 0.4);
+      opacity: 1;
+    }
+    .play-overlay mat-icon {
+      color: #fff;
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 0, 0, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease;
+    }
+    .chat-video-card:hover .play-overlay mat-icon {
+      transform: scale(1.1);
+      background: #ff0000;
+    }
+    .video-info {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .video-title {
+      color: var(--text);
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      height: 2.7em;
+    }
+    .video-channel {
+      color: var(--muted);
+      font-size: 0.72rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .video-channel mat-icon {
+      font-size: 12px;
+      width: 12px;
+      height: 12px;
+    }
     .chat-input { align-items: center; border-top: 1px solid var(--border); display: flex; gap: 12px; padding: 14px 20px; }
-    @media (max-width: 620px) { .chat-recipe { width: 100%; } }
+    @media (max-width: 620px) {
+      .chat-recipe { width: 100%; }
+      .chat-video-card {
+        width: 100%;
+        flex-direction: row;
+        height: 80px;
+      }
+      .video-thumbnail-wrapper {
+        width: 120px;
+        height: 100%;
+        aspect-ratio: auto;
+      }
+      .video-info {
+        flex: 1;
+        justify-content: center;
+      }
+      .video-title {
+        height: auto;
+        -webkit-line-clamp: 2;
+      }
+    }
   `]
 })
 export class Chat implements AfterViewChecked {

@@ -2,12 +2,13 @@ import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, finalize, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ChatMessage } from '../../models/chat.model';
+import { ChatMessage, YouTubeVideo } from '../../models/chat.model';
 import { Recipe } from '../../models/recipe.model';
 
 interface ChatResponse {
   reply: string;
   recipes: Recipe[];
+  videos?: YouTubeVideo[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -23,23 +24,24 @@ export class ChatSignalStore {
     if (!message) return;
 
     this.messages.update((items) => {
-      const next: ChatMessage[] = [...items, { role: 'user', text: message }];
+      const next: ChatMessage[] = [...items, { role: 'user' as const, text: message }];
       this.persistMessages(next);
       return next;
     });
     this.loading.set(true);
 
-    this.http.post<ChatResponse>(`${environment.apiUrl}/chat`, { message }).pipe(
+    const history = this.messages().slice(0, -1);
+    this.http.post<ChatResponse>(`${environment.apiUrl}/chat`, { message, history }).pipe(
       tap((res) => {
         this.messages.update((items) => {
-          const next: ChatMessage[] = [...items, { role: 'assistant', text: res.reply, recipes: res.recipes }];
+          const next: ChatMessage[] = [...items, { role: 'assistant' as const, text: res.reply, recipes: res.recipes, videos: res.videos }];
           this.persistMessages(next);
           return next;
         });
       }),
       catchError(() => {
         this.messages.update((items) => {
-          const next: ChatMessage[] = [...items, { role: 'assistant', text: 'Sorry, I could not reach the recipe service. Please try again.' }];
+          const next: ChatMessage[] = [...items, { role: 'assistant' as const, text: 'Sorry, I could not reach the recipe service. Please try again.' }];
           this.persistMessages(next);
           return next;
         });
@@ -50,24 +52,31 @@ export class ChatSignalStore {
   }
 
   clearSession(): void {
-    localStorage.removeItem(this.storageKey);
-    this.messages.set([{ role: 'assistant', text: 'Hi! Tell me what ingredients you have, or a cuisine you feel like eating, and I will suggest a recipe. For example: "tomato, onion and paneer" or "Indian dessert".' }]);
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem(this.storageKey);
+    }
+    this.messages.set([{ role: 'assistant' as const, text: 'Hi! Tell me what ingredients you have, or a cuisine you feel like eating, and I will suggest a recipe. For example: "tomato, onion and paneer" or "Indian dessert".' }]);
   }
 
   private readMessages(): ChatMessage[] {
-    const raw = localStorage.getItem(this.storageKey);
+    if (typeof window === 'undefined') {
+      return [{ role: 'assistant' as const, text: 'Hi! Tell me what ingredients you have, or a cuisine you feel like eating, and I will suggest a recipe. For example: "tomato, onion and paneer" or "Indian dessert".' }];
+    }
+    const raw = sessionStorage.getItem(this.storageKey);
     if (!raw) {
-      return [{ role: 'assistant', text: 'Hi! Tell me what ingredients you have, or a cuisine you feel like eating, and I will suggest a recipe. For example: "tomato, onion and paneer" or "Indian dessert".' }];
+      return [{ role: 'assistant' as const, text: 'Hi! Tell me what ingredients you have, or a cuisine you feel like eating, and I will suggest a recipe. For example: "tomato, onion and paneer" or "Indian dessert".' }];
     }
 
     try {
       return JSON.parse(raw) as ChatMessage[];
     } catch {
-      return [{ role: 'assistant', text: 'Hi! Tell me what ingredients you have, or a cuisine you feel like eating, and I will suggest a recipe. For example: "tomato, onion and paneer" or "Indian dessert".' }];
+      return [{ role: 'assistant' as const, text: 'Hi! Tell me what ingredients you have, or a cuisine you feel like eating, and I will suggest a recipe. For example: "tomato, onion and paneer" or "Indian dessert".' }];
     }
   }
 
   private persistMessages(messages: ChatMessage[]): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(messages));
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem(this.storageKey, JSON.stringify(messages));
+    }
   }
 }

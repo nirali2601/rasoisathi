@@ -1,4 +1,4 @@
-# RasoiSathi AI
+# RasoiSathi
 
 Smart recipe recommendation app built with Angular 21, Node.js, Express, SQLite, JWT authentication, and the free TheMealDB API.
 
@@ -25,7 +25,7 @@ A `/chat` page lets the user type a normal sentence instead of filling the searc
 - `suggest an Indian dessert`
 - `something Italian with mushroom`
 
-**How it works (rule-based, no paid AI model):**
+**How it works (rule-based):**
 
 1. The backend keeps a small in-memory list of TheMealDB's known categories (e.g. `Dessert`, `Vegetarian`) and cuisines (e.g. `Indian`, `Italian`), fetched once and cached.
 2. It checks the typed sentence for any of those exact words.
@@ -35,7 +35,7 @@ A `/chat` page lets the user type a normal sentence instead of filling the searc
 6. The parsed `{ ingredients, cuisine, category }` is passed into the **same search function** used by the normal Search page, so chat results are always consistent with manual search results.
 7. The assistant replies with a short sentence plus up to 6 matching recipe cards, ranked by how many of the typed ingredients each recipe actually contains.
 
-This keeps the feature fully explainable — it's straightforward string parsing plus the existing ingredient-match algorithm, not a black-box AI call.
+This keeps the feature fully explainable — it's straightforward string parsing plus the existing ingredient-match algorithm, not a black-box model call.
 
 The chat endpoint works for guests too. If the user is logged in, each chat message is also saved to their search history.
 
@@ -68,7 +68,7 @@ When a user enters ingredients such as `tomato,onion,paneer`, the backend fetche
 Match % = (Matched Ingredients / Total User Ingredients) * 100
 ```
 
-This is simple, explainable, and suitable for an examiner because it does not depend on a paid AI model. The Chat Assistant reuses this exact same function.
+This is simple, explainable, and suitable for an examiner because it does not depend on a paid third-party model. The Chat Assistant reuses this exact same function.
 
 ## Run Locally
 
@@ -241,4 +241,4 @@ This is intentional — it means the message didn't contain a recognizable ingre
 
 ## Examiner Explanation
 
-RasoiSathi AI is a full-stack recipe recommendation app. Angular handles UI, routes, forms, guards, and state with Signals. Express handles secure APIs, JWT auth, SQLite storage, and TheMealDB integration. The recommendation score is calculated by comparing user-entered ingredients with ingredients found in each recipe, then sorting the highest match first. The Chat Assistant is a thin, rule-based layer on top of the same search function — it looks for known category/cuisine words in the sentence and treats the remaining words as ingredients, so it can be explained line-by-line without referencing any AI model.
+RasoiSathi is a full-stack recipe recommendation app. Angular handles UI, routes, forms, guards, and state with Signals. Express handles secure APIs, JWT auth, SQLite storage, and TheMealDB integration. The recommendation score is calculated by comparing user-entered ingredients with ingredients found in each recipe, then sorting the highest match first. The Chat Assistant is a thin, rule-based layer on top of the same search function — it looks for known category/cuisine words in the sentence and treats the remaining words as ingredients, so it can be explained line-by-line without referencing any machine learning model.

@@ -1,5 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,25 +29,26 @@ import { Recipe } from '../../models/recipe.model';
       </div>
 
       <form class="panel search-panel" [formGroup]="form" (ngSubmit)="search()">
-        <div class="search-input-wrapper">
-          <mat-icon class="search-icon">search</mat-icon>
-          <input type="text" formControlName="query" placeholder="tomato, onion, paneer..." aria-label="Search ingredients or recipe name" />
-        </div>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Ingredients / Recipe Name</mat-label>
+          <mat-icon matPrefix style="margin-right: 8px;">search</mat-icon>
+          <input matInput type="text" formControlName="query" placeholder="tomato, onion, paneer..." />
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Mode</mat-label>
           <mat-select formControlName="mode">
             <mat-option value="ingredients">Ingredients</mat-option>
             <mat-option value="name">Recipe Name</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Cuisine</mat-label>
           <mat-select formControlName="cuisine">
             <mat-option value="">Any</mat-option>
             @for (item of store.cuisines(); track item) { <mat-option [value]="item">{{ item }}</mat-option> }
           </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Category</mat-label>
           <mat-select formControlName="category">
             <mat-option value="">Any</mat-option>
@@ -56,6 +57,9 @@ import { Recipe } from '../../models/recipe.model';
         </mat-form-field>
         <button mat-flat-button color="primary" type="submit" [disabled]="store.loading()">
           <mat-icon>search</mat-icon> Search
+        </button>
+        <button mat-stroked-button type="button" [disabled]="randomLoading()" (click)="surpriseMe()">
+          <mat-icon>casino</mat-icon> Surprise Me
         </button>
       </form>
 
@@ -91,14 +95,23 @@ import { Recipe } from '../../models/recipe.model';
       align-items: center;
       display: grid;
       gap: 14px;
-      grid-template-columns: 2fr 1fr 1fr 1fr auto;
+      grid-template-columns: 2fr 1fr 1fr 1fr auto auto;
       margin-bottom: 8px;
+    }
+    .search-panel mat-form-field {
+      width: 100%;
+    }
+    .search-panel button {
+      height: 56px;
+      border-radius: 999px !important;
+      font-weight: 600 !important;
+      font-size: 1rem !important;
     }
     .results { margin-top: 8px; }
     .results-count { color: var(--muted); font-size: 0.92rem; margin: 20px 0 0; }
     @media (max-width: 980px) {
       .search-panel { grid-template-columns: 1fr 1fr; }
-      .search-panel button { grid-column: 1 / -1; }
+      .search-panel button { grid-column: 1 / -1; height: 50px; }
     }
     @media (max-width: 620px) { .search-panel { grid-template-columns: 1fr; } }
   `]
@@ -106,7 +119,9 @@ import { Recipe } from '../../models/recipe.model';
 export class RecipeSearch implements OnInit {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   store = inject(RecipeSignalStore);
+  randomLoading = signal(false);
   fav = inject(FavoriteSignalStore);
   auth = inject(AuthSignalStore);
   private snack = inject(SnackService);
@@ -137,6 +152,20 @@ export class RecipeSearch implements OnInit {
             error: () => this.lastSavedHistoryKey = historyKey
           });
         }
+      }
+    });
+  }
+
+  surpriseMe(): void {
+    this.randomLoading.set(true);
+    this.store.getRandomRecipe().subscribe({
+      next: (recipe) => {
+        this.randomLoading.set(false);
+        this.router.navigate(['/recipes', recipe.id]);
+      },
+      error: () => {
+        this.randomLoading.set(false);
+        this.snack.show('Could not fetch a random recipe. Please try again.');
       }
     });
   }

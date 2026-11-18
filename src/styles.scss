@@ -131,6 +131,30 @@ img { display: block; max-width: 100%; }
 .mat-mdc-outlined-button { border-radius: 999px !important; font-weight: 600 !important; }
 .mat-mdc-button-base { transition: transform 0.2s ease, box-shadow 0.2s ease !important; }
 .mat-mdc-button-base:hover:not([disabled]) { transform: translateY(-1px); }
+/* Align icon and text inside Angular Material buttons */
+.mat-mdc-button-base .mdc-button__label {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  gap: 8px;
+}
+.mat-mdc-button-base .mdc-button__label mat-icon {
+  margin: 0 !important;
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-label-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
 mat-form-field { width: 100%; }
 .mat-mdc-snack-bar-container {
   --mdc-snackbar-container-color: #1a1a2e;

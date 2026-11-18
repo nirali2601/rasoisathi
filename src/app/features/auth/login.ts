@@ -16,7 +16,7 @@ import { SnackService } from '../../core/services/snack.service';
     <section class="auth-page">
       <div class="auth-bg" aria-hidden="true"></div>
       <div class="auth-card">
-        <div class="auth-brand"><span>R</span> RasoiSathi <em>AI</em></div>
+        <div class="auth-brand"><span>R</span> RasoiSathi</div>
         <h1>Welcome back</h1>
         <p class="auth-sub">Sign in to access your favorites and recipe history</p>
 
@@ -49,7 +49,7 @@ import { SnackService } from '../../core/services/snack.service';
 
           <button mat-flat-button color="primary" class="submit-btn" [disabled]="form.invalid || loading()">
             @if (loading()) { <mat-spinner diameter="20" /> }
-            @else { <ng-container><mat-icon>login</mat-icon> Login</ng-container> }
+            @else { <span class="btn-label-content"><mat-icon>login</mat-icon> <span>Login</span></span> }
           </button>
         </form>
 

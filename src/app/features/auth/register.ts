@@ -19,9 +19,9 @@ function samePassword(control: AbstractControl) { return control.value.password 
     <section class="auth-page">
       <div class="auth-bg" aria-hidden="true"></div>
       <div class="auth-card">
-        <div class="auth-brand"><span>R</span> RasoiSathi <em>AI</em></div>
+        <div class="auth-brand"><span>R</span> RasoiSathi</div>
         <h1>Create your account</h1>
-        <p class="auth-sub">Join thousands of home cooks discovering recipes with AI</p>
+        <p class="auth-sub">Join thousands of home cooks discovering recipes instantly</p>
 
         <form class="form" [formGroup]="form" (ngSubmit)="submit()">
           <mat-form-field appearance="outline">
@@ -66,7 +66,7 @@ function samePassword(control: AbstractControl) { return control.value.password 
 
           <button mat-flat-button color="primary" class="submit-btn" [disabled]="form.invalid || loading()">
             @if (loading()) { <mat-spinner diameter="20" /> }
-            @else { <ng-container><mat-icon>person_add</mat-icon> Create Account</ng-container> }
+            @else { <span class="btn-label-content"><mat-icon>person_add</mat-icon> <span>Create Account</span></span> }
           </button>
         </form>
 

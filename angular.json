@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "rasoisathi-ai": {
+    "rasoisathi": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -65,10 +65,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "rasoisathi-ai:build:production"
+              "buildTarget": "rasoisathi:build:production"
             },
             "development": {
-              "buildTarget": "rasoisathi-ai:build:development"
+              "buildTarget": "rasoisathi:build:development"
             }
           },
           "defaultConfiguration": "development"

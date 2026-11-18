@@ -17,8 +17,8 @@ import { MatIconModule } from '@angular/material/icon';
       <h1>Looks like this recipe got eaten</h1>
       <p>The page you're looking for doesn't exist or may have been moved.</p>
       <div class="actions">
-        <a mat-flat-button color="primary" routerLink="/"><mat-icon>home</mat-icon> Go Home</a>
-        <a mat-stroked-button routerLink="/search"><mat-icon>search</mat-icon> Browse Recipes</a>
+        <a mat-flat-button color="primary" routerLink="/"><mat-icon>home</mat-icon> <span>Go Home</span></a>
+        <a mat-stroked-button routerLink="/search"><mat-icon>search</mat-icon> <span>Browse Recipes</span></a>
       </div>
     </section>
   `,
